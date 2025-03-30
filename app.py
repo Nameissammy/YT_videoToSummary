@@ -25,7 +25,7 @@ if url:
     
 video_id = get_video_id(url)
 
-if st.button("Summaries"):
+if st.button("Summarise"):
     # getting transcript
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
