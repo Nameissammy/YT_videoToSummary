@@ -8,6 +8,9 @@ import os
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
+# Initialize session state for text input
+if "youtube_link" not in st.session_state:
+    st.session_state.youtube_link = ""
 
 # function to get youtube video id
 def get_video_id(url):
@@ -15,8 +18,11 @@ def get_video_id(url):
 
 
 st.title("YT Video to Summary")
-url = st.text_input("Enter YT video Link")
-
+# Text input with session state
+url = st.text_input("Enter YouTube Video Link", st.session_state.youtube_link)
+if url:
+    st.session_state.youtube_link = url
+    
 video_id = get_video_id(url)
 
 if st.button("Summaries"):
@@ -26,7 +32,7 @@ if st.button("Summaries"):
     # concating all text into a single string
     transcript_joined = " ".join([line["text"] for line in transcript])
 
-    prompt = f"You are a summarizer who summarises youtube video content. This is the content: {transcript_joined}"
+    prompt = f"You are a summarizer who summarises youtube video content with heading and sub heading. This is the content: {transcript_joined}"
 
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel("gemini-2.0-flash")
